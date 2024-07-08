@@ -22,8 +22,12 @@ pico_sdk_init()
 add_subdirectory(blink)
 add_subdirectory(hello)
 
-add_compile_options(-Wall
+add_compile_options(
+    -Wall
     -Wno-format          # int != int32_t as far as the compiler is concerned because gcc has int32_t as long int
     -Wno-unused-function # we have some for the docs that aren't called
     -Wno-maybe-uninitialized
+
+    -fno-rtti
+    -fno-exceptions
     )
