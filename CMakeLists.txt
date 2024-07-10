@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.13)
 
 set(CMAKE_SYSTEM_NAME Generic)
 
@@ -18,9 +18,10 @@ endif()
 # Initialize the SDK
 pico_sdk_init()
 
-# Add blink example
+# add applications
 add_subdirectory(blink)
 add_subdirectory(hello)
+add_subdirectory(oled)
 
 add_compile_options(
     -Wall

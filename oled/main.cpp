@@ -1,4 +1,6 @@
+#include <cstdio>
 #include "pico/stdlib.h"
+#include "OLED_Test.h"
 
 /*
  * Waveshare 1.5 inch OLED Pin Config:
@@ -18,17 +20,7 @@
 
 int main()
 {
-    const uint LED_PIN = 25;
-    timer_hw->dbgpause = 0;
-    gpio_init(LED_PIN);
-    gpio_set_dir(LED_PIN, GPIO_OUT);
-    while (true)
-    {
-        gpio_put(LED_PIN, 1);
-        sleep_ms(250);
-        gpio_put(LED_PIN, 0);
-        sleep_ms(250);
-    }
+    OLED_0in49_test();
 
     return 0;
 }
