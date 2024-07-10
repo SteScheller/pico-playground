@@ -1,6 +1,6 @@
 /*****************************************************************************
 * | File        :   OLED_0in49.h
-* | Author      :   
+* | Author      :
 * | Function    :   0.49inch OLEDDrive function
 * | Info        :
 *----------------
@@ -28,37 +28,35 @@
 # THE SOFTWARE.
 ******************************************************************************/
 #ifndef __OLED_0IN49_H
-#define __OLED_0IN49_H		
+#define __OLED_0IN49_H
 
 #include "DEV_Config.h"
 
 /********************************************************************************
-function:	
+function:
 		Define the full screen height length of the display
 ********************************************************************************/
-#define USE_SPI 0
-#define USE_IIC 1
+#define USE_SPI 1
+#define USE_IIC 0
 
-#define IIC_CMD				(0X00)
-#define IIC_RAM				(0X40)
+#define IIC_CMD (0X00)
+#define IIC_RAM (0X40)
 
-#define OLED_0in49_ADDR		(0X3C)
-#define OLED_0in49_WIDTH	(64) //OLED width
-#define OLED_0in49_HEIGHT	(32) //OLED height
+#define OLED_0in49_ADDR (0X3C)
+#define OLED_0in49_WIDTH (64)  // OLED width
+#define OLED_0in49_HEIGHT (32) // OLED height
 
-#define OLED_CS_0 	DEV_Digital_Write(LCD_CS_PIN,0)
-#define OLED_CS_1 	DEV_Digital_Write(LCD_CS_PIN,1)
+#define OLED_CS_0 DEV_Digital_Write(LCD_CS_PIN, 0)
+#define OLED_CS_1 DEV_Digital_Write(LCD_CS_PIN, 1)
 
-#define OLED_RST_0	DEV_Digital_Write(LCD_RST_PIN,0)
-#define OLED_RST_1	DEV_Digital_Write(LCD_RST_PIN,1)
+#define OLED_RST_0 DEV_Digital_Write(LCD_RST_PIN, 0)
+#define OLED_RST_1 DEV_Digital_Write(LCD_RST_PIN, 1)
 
-#define OLED_DC_0 	DEV_Digital_Write(LCD_DC_PIN,0)
-#define OLED_DC_1 	DEV_Digital_Write(LCD_DC_PIN,1)
-
+#define OLED_DC_0 DEV_Digital_Write(LCD_DC_PIN, 0)
+#define OLED_DC_1 DEV_Digital_Write(LCD_DC_PIN, 1)
 
 void OLED_0in49_Init(void);
 void OLED_0in49_Clear(void);
 void OLED_0in49_Display(const UBYTE *Image);
 
-#endif  
-	 
+#endif

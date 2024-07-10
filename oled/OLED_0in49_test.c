@@ -1,7 +1,7 @@
 /*****************************************************************************
 * | File      	:   OLED_1in3_test.c
 * | Author      :   Waveshare Team
-* | Function    :   
+* | Function    :
 * | Info        :
 *----------------
 * |	This version:   V1.0
@@ -26,27 +26,33 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 ******************************************************************************/
+#include "DEV_Config.h"
+#include "GUI_Paint.h"
+#include "Debug.h"
+#include <stdlib.h> // malloc() free()
+
 #include "OLED_Test.h"
 #include "OLED_0in49.h"
 #include "GUI_Paint.h"
 #include "ImageData.h"
 
-
 int OLED_0in49_test(void)
 {
     DEV_Delay_ms(100);
-    
-    if(DEV_Module_Init()!=0){
-        while(1){
+
+    if (DEV_Module_Init() != 0)
+    {
+        while (1)
+        {
             printf("END\r\n");
         }
     }
-    printf("OELD_test Demo\r\n");
+    printf("OLED_test Demo\r\n");
 
     /* Init */
     OLED_0in49_Init();
     OLED_0in49_Clear();
-    
+
     // 0.Create a new image cache
     UBYTE *BlackImage;
     UWORD Imagesize = ((OLED_0in49_WIDTH == 0) ? (OLED_0in49_WIDTH) : (OLED_0in49_WIDTH + 1)) * OLED_0in49_HEIGHT;
@@ -55,7 +61,7 @@ int OLED_0in49_test(void)
         printf("Failed to apply for black memory...\r\n");
         return -1;
     }
-    Paint_NewImage(BlackImage, OLED_0in49_HEIGHT, OLED_0in49_WIDTH,270, BLACK);
+    Paint_NewImage(BlackImage, OLED_0in49_HEIGHT, OLED_0in49_WIDTH, 270, BLACK);
     Paint_SetScale(2);
     printf("Drawing\r\n");
     // 1.Select Image
@@ -63,8 +69,9 @@ int OLED_0in49_test(void)
     Paint_Clear(BLACK);
     DEV_Delay_ms(500);
     OLED_0in49_Display(BlackImage);
-	
-    while(1) {
+
+    while (1)
+    {
         printf("Drawing:page 1\r\n");
         Paint_DrawPoint(10, 10, WHITE, DOT_PIXEL_2X2, DOT_STYLE_DFT);
         Paint_DrawPoint(25, 10, WHITE, DOT_PIXEL_2X2, DOT_STYLE_DFT);
@@ -77,7 +84,7 @@ int OLED_0in49_test(void)
         OLED_0in49_Display(BlackImage);
         DEV_Delay_ms(2000);
         Paint_Clear(BLACK);
-        
+
         printf("Drawing:page 2\r\n");
         Paint_DrawCircle(30, 16, 12, WHITE, DOT_PIXEL_1X1, DRAW_FILL_EMPTY);
         OLED_0in49_Display(BlackImage);
@@ -88,12 +95,12 @@ int OLED_0in49_test(void)
         Paint_DrawString_EN(0, 0, "waveshare", &Font12, BLACK, WHITE);
         OLED_0in49_Display(BlackImage);
         DEV_Delay_ms(2000);
-        Paint_Clear(BLACK); 
+        Paint_Clear(BLACK);
         Paint_DrawNum(0, 10, 123.456, &Font12, 3, WHITE, BLACK);
         OLED_0in49_Display(BlackImage);
         DEV_Delay_ms(2000);
         Paint_Clear(BLACK);
-        Paint_DrawString_CN(0, 5, "ÄãºÃ", &Font12CN, WHITE, BLACK);
+        Paint_DrawString_CN(0, 5, "ï¿½ï¿½ï¿½", &Font12CN, WHITE, BLACK);
         DEV_Delay_ms(20);
         OLED_0in49_Display(BlackImage);
         Paint_DrawString_EN(35, 10, "Pico", &Font8, WHITE, BLACK);
@@ -107,7 +114,7 @@ int OLED_0in49_test(void)
         OLED_0in49_Clear();
         DEV_Delay_ms(2000);
     }
-    
+
     DEV_Module_Exit();
     return 0;
 }
