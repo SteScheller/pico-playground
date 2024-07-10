@@ -3,7 +3,6 @@ add_executable(oled
     ImageData.c
     ImageData.h
     OLED_0in49_test.c
-    OLED_0in49.c
     OLED_Test.h
 )
 
@@ -20,7 +19,6 @@ include_directories(./lib/OLED)
 # pull in common dependencies
 target_link_libraries(oled 
     pico_stdlib 
-    examples 
     Config 
     GUI 
     Fonts 

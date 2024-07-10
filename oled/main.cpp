@@ -1,4 +1,3 @@
-#include <cstdio>
 #include "pico/stdlib.h"
 #include "OLED_Test.h"
 
