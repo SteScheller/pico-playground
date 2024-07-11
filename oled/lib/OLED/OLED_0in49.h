@@ -43,8 +43,8 @@ function:
 #define IIC_RAM (0X40)
 
 #define OLED_0in49_ADDR (0X3C)
-#define OLED_0in49_WIDTH (64)  // OLED width
-#define OLED_0in49_HEIGHT (32) // OLED height
+#define OLED_0in49_WIDTH (128)	// OLED width
+#define OLED_0in49_HEIGHT (128) // OLED height
 
 #define OLED_CS_0 DEV_Digital_Write(LCD_CS_PIN, 0)
 #define OLED_CS_1 DEV_Digital_Write(LCD_CS_PIN, 1)
