@@ -52,6 +52,9 @@ int main()
         std::printf(".");
         gpio_put(LED_PIN, 0);
         sleep_ms(250);
+
+        std::printf("\nsending test image\n");
+        oled.show_test_image();
     }
 
     return 0;

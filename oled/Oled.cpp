@@ -1,4 +1,5 @@
 #include "Oled.h"
+#include "pico/time.h"
 #include "hardware/gpio.h"
 #include "hardware/spi.h"
 
@@ -19,6 +20,14 @@ void Oled::init()
     gpio_init(m_config.data_command);
     gpio_set_dir(m_config.reset, GPIO_OUT);
     gpio_set_dir(m_config.data_command, GPIO_OUT);
+
+    // reset oled
+    gpio_put(m_config.reset, 1);
+    sleep_ms(100);
+    gpio_put(m_config.reset, 0);
+    sleep_ms(100);
+    gpio_put(m_config.reset, 1);
+    sleep_ms(100);
 
     // oled controller config
     write_config_register(0xAE); /*display off*/
@@ -72,4 +81,29 @@ void Oled::write_config_register(uint8_t reg)
     gpio_put(m_config.chip_select, 0);
     spi_write_blocking(m_config.spi, &reg, 1);
     gpio_put(m_config.chip_select, 1);
+}
+
+void Oled::write_data(uint8_t data)
+{
+    gpio_put(m_config.data_command, 1);
+    gpio_put(m_config.chip_select, 0);
+    spi_write_blocking(m_config.spi, &data, 1);
+    gpio_put(m_config.chip_select, 1);
+}
+
+void Oled::show_test_image()
+{
+    static constexpr uint8_t TEST_BYTE{0xF0};
+
+    write_config_register(0x22);
+    write_config_register(0x00);
+    write_config_register(0x03);
+    write_config_register(0x21);
+    write_config_register(0x20);
+    write_config_register(0x5f);
+
+    for (size_t i = 0; i < (WIDTH * HEIGHT / 2); ++i)
+    {
+        write_data(TEST_BYTE);
+    }
 }
