@@ -49,16 +49,16 @@
  * GPIO config
  **/
 
-#define LCD_RST_PIN 27
-#define LCD_DC_PIN 26
-#define LCD_BL_PIN 29
+#define LCD_RST_PIN 21
+#define LCD_DC_PIN 20
+#define LCD_BL_PIN 22
 
-#define LCD_CS_PIN 22
-#define LCD_CLK_PIN 24
-#define LCD_MOSI_PIN 25
+#define LCD_CS_PIN 17
+#define LCD_CLK_PIN 18
+#define LCD_MOSI_PIN 19
 
-#define LCD_SCL_PIN 5
-#define LCD_SDA_PIN 4
+#define LCD_SCL_PIN 3
+#define LCD_SDA_PIN 2
 /*------------------------------------------------------------------------------------------------------*/
 void DEV_Digital_Write(UWORD Pin, UBYTE Value);
 UBYTE DEV_Digital_Read(UWORD Pin);
