@@ -1,9 +1,11 @@
 add_executable(oled
     main.cpp
-    ImageData.c
-    ImageData.h
-    OLED_0in49_test.c
-    OLED_Test.h
+    #ImageData.c
+    #ImageData.h
+    #OLED_0in49_test.c
+    #OLED_Test.h
+    Oled.cpp
+    Oled.h
 )
 
 # include libs
