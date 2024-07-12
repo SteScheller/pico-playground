@@ -33,8 +33,10 @@ public:
     void show_test_image();
 
 private:
-    void write_config_register(uint8_t reg);
-    void write_data(uint8_t data);
+    void write(const uint8_t *data, size_t size, bool is_data);
+    void write_command(const uint8_t *data, size_t size);
+    void write_data(const uint8_t *data, size_t size);
 
     Config m_config;
+    image_data_t m_test_image;
 };

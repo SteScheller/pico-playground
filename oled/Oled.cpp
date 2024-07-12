@@ -3,8 +3,40 @@
 #include "hardware/gpio.h"
 #include "hardware/spi.h"
 
+namespace
+{
+    constexpr uint8_t DISPLAY_OFF[] = {0xAE};
+    constexpr uint8_t DISPLAY_ON[] = {0xAF};
+    constexpr uint8_t COLUMN_ADDRESS[] = {0x15, 0x00, 0x3F};
+    constexpr uint8_t ROW_ADDRESS[] = {0x75, 0x00, 0x7F};
+    constexpr uint8_t CONTRAST[] = {0x81, 0x7F};
+}
+
 Oled::Oled(Config config) : m_config{config}
 {
+    /**
+     * Display Byte Order
+     * ------------------
+     *
+     *      p(0, HEIGHT - 1)            ...             p(WIDTH - 1, HEIGHT - 1)
+     *      ...                                         ...
+     *      p(0,0)                      ...             p(WIDTH - 1, 0)
+     *
+     *  - 4 bit per pixel
+     *  - 2 pixel per byte
+     *
+     * uint8_t display_data[WIDTH * HEIGHT / 2] = {...};
+     * display_data[0] = p(0, 1) << 4 | p(0, 0);
+     * display_data[1] = p(0, 3) << 4 | p(0, 2);
+     * ...
+     * display_data[HEIGHT / 2] = p(1, 1) << 4 | p(1, 0);
+     * ...
+     *
+     */
+    for (size_t i = 0; i < m_test_image.size(); ++i)
+    {
+        m_test_image[i] = i % 0x10;
+    }
 }
 
 void Oled::init()
@@ -30,80 +62,32 @@ void Oled::init()
     sleep_ms(100);
 
     // oled controller config
-    write_config_register(0xAE); /*display off*/
-
-    write_config_register(0x00); /*set lower column address*/
-    write_config_register(0x12); /*set higher column address*/
-
-    write_config_register(0x00); /*set display start line*/
-
-    write_config_register(0xB0); /*set page address*/
-
-    write_config_register(0x81); /*contract control*/
-    write_config_register(0x4f); /*128*/
-
-    write_config_register(0xA0); /*set segment remap*/
-
-    write_config_register(0xA6); /*normal / reverse*/
-
-    write_config_register(0xA8); /*multiplex ratio*/
-    write_config_register(0x1F); /*duty = 1/32*/
-
-    write_config_register(0xC8); /*Com scan direction*/
-
-    write_config_register(0xD3); /*set display offset*/
-    write_config_register(0x00);
-
-    write_config_register(0x20);
-    write_config_register(0x01); /*set Vertical Addressing Mode*/
-
-    write_config_register(0xD5); /*set osc division*/
-    write_config_register(0x80);
-
-    write_config_register(0xD9); /*set pre-charge period*/
-    write_config_register(0xf1);
-
-    write_config_register(0xDA); /*set COM pins*/
-    write_config_register(0x12);
-
-    write_config_register(0xdb); /*set vcomh*/
-    write_config_register(0x40);
-
-    write_config_register(0x8d); /*set charge pump enable*/
-    write_config_register(0x14);
-
-    write_config_register(0xAF); /*display ON*/
+    write_command(DISPLAY_OFF, sizeof(DISPLAY_OFF));
+    write_command(COLUMN_ADDRESS, sizeof(COLUMN_ADDRESS));
+    write_command(ROW_ADDRESS, sizeof(ROW_ADDRESS));
+    write_command(CONTRAST, sizeof(CONTRAST));
+    write_command(DISPLAY_ON, sizeof(DISPLAY_ON));
 }
 
-void Oled::write_config_register(uint8_t reg)
+void Oled::write(const uint8_t *data, size_t size, bool is_data)
 {
-    gpio_put(m_config.data_command, 0);
+    gpio_put(m_config.data_command, is_data ? 1 : 0);
     gpio_put(m_config.chip_select, 0);
-    spi_write_blocking(m_config.spi, &reg, 1);
+    spi_write_blocking(m_config.spi, data, size);
     gpio_put(m_config.chip_select, 1);
 }
 
-void Oled::write_data(uint8_t data)
+void Oled::write_command(const uint8_t *data, size_t size)
 {
-    gpio_put(m_config.data_command, 1);
-    gpio_put(m_config.chip_select, 0);
-    spi_write_blocking(m_config.spi, &data, 1);
-    gpio_put(m_config.chip_select, 1);
+    write(data, size, false);
+}
+
+void Oled::write_data(const uint8_t *data, size_t size)
+{
+    write(data, size, true);
 }
 
 void Oled::show_test_image()
 {
-    static constexpr uint8_t TEST_BYTE{0xF0};
-
-    write_config_register(0x22);
-    write_config_register(0x00);
-    write_config_register(0x03);
-    write_config_register(0x21);
-    write_config_register(0x20);
-    write_config_register(0x5f);
-
-    for (size_t i = 0; i < (WIDTH * HEIGHT / 2); ++i)
-    {
-        write_data(TEST_BYTE);
-    }
+    write_data(m_test_image.data(), m_test_image.size());
 }
